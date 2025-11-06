@@ -1,6 +1,6 @@
 ---
 categories:
-	- English
+- English
 ---
 
 # collocation(2)

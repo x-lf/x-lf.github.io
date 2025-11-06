@@ -1,6 +1,6 @@
 ---
-categories:
-	- English
+categroies:
+- English
 ---
 
 # English tense

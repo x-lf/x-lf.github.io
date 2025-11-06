@@ -1,6 +1,6 @@
 ---
-categories:
-	- English
+categroies:
+- English
 ---
 # 2023-10-13 colocation(1)
 
