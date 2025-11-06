@@ -1,3 +1,8 @@
+---
+categories:
+	- English
+---
+
 # collocation(2)
 
 1. get/lose bearings 

@@ -1,7 +1,9 @@
-tags:
-- English
-
 ---
+categories:
+	- English
+---
+
+# English tense
 
 |                 | simple   | progressive     | perfect         | perfect pregressive   |
 | --------------- | -------- | --------------- | --------------- | --------------------- |

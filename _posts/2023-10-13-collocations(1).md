@@ -1,7 +1,6 @@
 ---
-tags:
-- English
-- colocation
+categories:
+	- English
 ---
 # 2023-10-13 colocation(1)
 
