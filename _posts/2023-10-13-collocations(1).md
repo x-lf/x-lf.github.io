@@ -1,6 +1,8 @@
+---
 tags:
 - English
 - colocation
+---
 # 2023-10-13 colocation(1)
 
 1. secular stagnation
