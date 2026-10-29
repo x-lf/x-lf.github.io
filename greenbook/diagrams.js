@@ -1,14 +1,14 @@
 'use strict';
-function svgFrame(body,label){return `<svg viewBox="0 0 620 300" role="img" aria-label="${esc(label)}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10" fill="#587969"/></marker></defs>${body}</svg>`;}
+let diagramSerial=0;
+function svgFrame(body,label){const markerId='arrow-'+(++diagramSerial);body=body.replaceAll('url(#arrow)','url(#'+markerId+')');return `<svg viewBox="0 0 620 300" role="img" aria-label="${esc(label)}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="${markerId}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10" fill="#587969"/></marker></defs>${body}</svg>`;}
 function textSvg(x,y,s,size=15,fill='#274d3f'){return `<text x="${x}" y="${y}" text-anchor="middle" fill="${fill}" font-family="system-ui,sans-serif" font-size="${size}">${esc(s)}</text>`;}
 function diagramFor(q){
  let content='';const id=q.id;
  if(id==='c2-have-we-met-before'){
-  const pts=[[310,38],[155,150],[310,150],[465,150],[230,255],[390,255]];const edges=[[0,1],[0,2],[0,3],[1,2]];
-  content=svgFrame(edges.map(([i,j])=>`<line x1="${pts[i][0]}" y1="${pts[i][1]}" x2="${pts[j][0]}" y2="${pts[j][1]}" stroke="#527b60" stroke-width="${i===0?4:6}"/>`).join('')+[[1,3],[2,3],[1,4],[4,5]].map(([i,j])=>`<line x1="${pts[i][0]}" y1="${pts[i][1]}" x2="${pts[j][0]}" y2="${pts[j][1]}" stroke="#d6dfd2" stroke-width="2" stroke-dasharray="5 7"/>`).join('')+pts.map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="22" fill="${i<3?'#214b3e':'#e0e8d9'}"/>${textSvg(x,y+6,'ABCDEF'[i],17,i<3?'#fffef9':'#52694e')}`).join('')+textSvg(310,211,t('B、C若认识，A–B–C构成认识三角','If B knows C, A–B–C is an acquaintance triangle.'),12),t('六人聚会的鸽巢原理与三角形证明图','Six-person pigeonhole and triangle proof'));
+  content=`<div class="diagram-cases"><button data-acquaintance-case="0" aria-pressed="true">${esc(t('情况一：其中两人认识','Case 1: an acquaintance pair'))}</button><button data-acquaintance-case="1" aria-pressed="false">${esc(t('情况二：三人互不认识','Case 2: three mutual strangers'))}</button></div><div class="case-diagram">${acquaintanceDiagram(0)}</div><p class="case-caption">${esc(t('先固定A，至少3人与A关系相同。若他们都认识A，分下面两种情况；陌生分支完全对称。','Fix A and choose three with the same relation to A. If they know A, inspect these two cases; the stranger branch is symmetric.'))}</p>`;
  }else if(id==='c2-matching-socks'){
   const sock=(x,y,color)=>`<path d="M${x} ${y}h39v67l25 22q10 18-14 27h-36q-20-4-14-22V${y}Z" fill="${color}" stroke="#244e3d" stroke-width="2"/>`;
-  content=svgFrame(sock(125,45,'#b86c48')+sock(280,45,'#557e60')+sock(435,45,'#557e60')+textSvg(310,230,t('3只袜子 → 2种颜色 → 至少一对','3 socks → 2 colors → at least one pair'),22)+textSvg(310,269,'3 > 2',20),t('三只袜子与两种颜色的鸽巢示意','Three socks in two color categories'));
+  content=svgFrame(sock(85,45,'#b86c48')+sock(225,45,'#d0ad53')+sock(365,45,'#6c91aa')+sock(505,45,'#6c91aa')+textSvg(310,230,t('4只袜子 → 3种颜色 → 至少一对','4 socks → 3 colors → at least one pair'),22)+textSvg(310,269,'4 > 3',20),t('四只袜子与三种颜色的鸽巢示意','Four socks in three color categories'));
  }else if(id==='c2-handshakes'){
   const bins=Array.from({length:25},(_,i)=>{const x=29+i*23;return `<rect x="${x}" y="165" width="20" height="54" rx="4" fill="${i===12?'#aac4a1':'#e0e8d9'}"/>${textSvg(x+10,196,i+1,10)}`;}).join('');
   content=svgFrame(textSvg(310,48,t('26个人','26 people'),25)+Array.from({length:26},(_,i)=>`<circle cx="${24+i*23}" cy="91" r="8" fill="${i===25?'#bb7848':'#527b60'}"/>`).join('')+`<path d="M310 112v34" stroke="#587969" stroke-width="3" marker-end="url(#arrow)"/>`+bins+textSvg(310,263,t('只有25个握手次数，至少两人进入同一格','Only 25 degree values: at least one value repeats.'),16),t('26个人映射到25种握手次数','26 people mapped to 25 handshake counts'));
@@ -27,6 +27,6 @@ function diagramFor(q){
  }else if(id==='c2-river-crossing'){
   content=`<div class="bridge-steps">${[['1 + 2 →',2],['← 1',1],['5 + 10 →',10],['← 2',2],['1 + 2 →',2]].map(([who,time],i)=>`<div><span>0${i+1}</span><strong>${who}</strong><b>${time}<small> min</small></b></div>`).join('')}</div><p class="diagram-total">2 + 1 + 10 + 2 + 2 = <b>17 min</b></p>`;
  }
- if(!content)return'';
+ if(!content)return extendedDiagram(q);
  return `<section class="diagram-panel"><div class="box-label">${esc(t('图解 · 重新绘制','DIAGRAM · REDRAWN'))}</div>${content}</section>`;
 }
