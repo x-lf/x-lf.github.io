@@ -1,29 +1,28 @@
-# Greenbook Atelier / 绿皮书练习室
+# Greenbook Atelier / 绿皮书五题练习
 
-A static Chinese/English practice website based on the owner's supplied 2008 edition of Xinfeng Zhou's *A Practical Guide to Quantitative Finance Interviews*. The owner confirmed permission for public adaptation in the project conversation.
+A buildless Chinese/English learning and multiple-choice practice website based on the supplied, owner-authorized 2008 edition of Xinfeng Zhou's *A Practical Guide to Quantitative Finance Interviews*.
 
-## Content scope
+## Current experience
 
-- 158 bilingual study units across the original seven chapters. A unit may group multiple original sub-questions.
-- Adapted Chinese/English study prompts, a hint, and a concise explanatory guide for every unit. These guides are not a sentence-by-sentence translation of the book.
-- All 213 original PDF pages, including front matter, figures, complete exercises, solutions and index, preserved as scans.
-- OCR reference text is explicitly secondary to the scan, particularly for mathematics.
-- Selected multiple-choice checks; free-form notes are not automatically graded.
-- An interactive two-ball floor-count exploration, bookmarks, progress, and JSON record export/import.
-- No video, login, analytics, external dependencies or backend. Notes and progress remain in browser localStorage and do not synchronize automatically.
+- All 158 study units have authored four-option questions. Calculation questions test results; proof and discussion questions test the argument that establishes the conclusion. Multiple original sub-questions may share a unit.
+- Whole-book practice or a choice of one or more of seven modules; exactly five distinct questions per set. A module with fewer than five questions must be combined with another.
+- Explicit choose → submit → feedback → next sequence, with shuffled options, 20 points per correct answer, current-set streaks, a fixed action bar, and a short transition within a stable scrolling card. No automatic advance.
+- End-of-set score, answer review and optional current-set errors prioritized in another full five-question set.
+- No accounts, saved progress, notes, bookmarks, long-term history or export/import. Session state exists only in JavaScript memory; refreshing clears it. No analytics, third-party scripts or backend.
+- Correct answers have bilingual explanatory guides and complete corresponding original English analysis transcribed from the source. OCR can affect mathematical glyphs; normalized guide formulas accompany it. These guides are not a full sentence-by-sentence Chinese translation of the book.
+- Native HTML/SVG diagrams replace scan images in the published site. The original PDF and rendered images remain available only in the local source workspace.
+- Reduced-motion preferences are respected. The implementation does not autoplay sound. Videos are deferred as requested.
 
-## Files and maintenance
+## Files
 
-`index.html`, `style.css`, and `app.js` are the interface. `data.json` holds learning units; each item has a stable ID, bilingual title/prompt/hint/solution, source PDF pages, optional quiz and source OCR. `book.json` has the OCR of all pages. `pages/001.jpg` through `pages/213.jpg` preserve the original scans. Printed page numbers equal PDF page minus 16 for the main book text.
+`index.html`, `style.css`, `app.js`, and `diagrams.js` make up the application. `data.json` contains the bilingual study content, quiz prompts/options/answer indexes, original-book analysis and source page references. `catalog.tsv` and `quiz-bank.tsv` are readable source companions. Printed main-text page numbers are the source PDF page minus sixteen.
 
-Source illustrations are not replaced by OCR. Corrections and instructional clarifications (e.g. conditional-normal normalization and hedge-share units) are reflected in the guides while the original scans remain unchanged. Follow the owner's authorization for any further reuse; no new license is granted here.
+The original copyright remains with its author; the owner confirmed public adaptation authorization. This repository does not grant a new reuse license.
 
-## Preview and publish
+## Preview and deployment
 
-Serve the repository root with a static web server, then open `/greenbook/`. Opening the HTML through `file://` does not support JSON fetching.
-
-The parent repository already publishes GitHub Pages from `main`. Updates to this folder publish at `https://x-lf.github.io/greenbook/`. No change to the existing Jekyll theme or homepage is required.
+Serve the repository root and open `/greenbook/`; JSON fetches require HTTP rather than `file://`. The existing GitHub Pages branch is `main`, publishing at `https://x-lf.github.io/greenbook/`. The parent homepage and Jekyll configuration remain as they were.
 
 ## Validation
 
-Checked desktop and 390px mobile layout; all chapter counts and 213 source image assets; language switching; hidden hints and answers; multiple-choice feedback; notes after reload; bookmarks and completion filters; export and invalid-file import; reader navigation; floor simulator at 1, 100 and 500 floors. An isolated browser reported no uncaught errors. Independently recomputed the dice-game and card-game Bellman values (6.1537379284 and 2.6244755490).
+Verified all 158 unique bilingual question records and their original-analysis boundaries; whole-book/module selection and the minimum-five guard; unique five-question sets; shuffled answer mapping; correct/wrong feedback and a deterministic 4/5=80 score; locked submissions; no automatic advance; unchanged submit-button position across questions on desktop and mobile; keyboard controls; full source-analysis access; current-set retry; refresh resetting all practice state; absence of notes, scan images and persisted study records; native diagrams and reduced-motion handling. Browser checks use a separate profile.

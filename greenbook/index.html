@@ -2,25 +2,25 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#214b3e"><meta name="description" content="周新峰量化面试绿皮书双语学习站：按原书七章学习，练习、分步提示、中英文讲解与原页对照。">
+<meta name="theme-color" content="#214b3e"><meta name="description" content="绿皮书五题练习：整体或模块选择，每组5道中英文选择题，即时反馈、连击与原书完整分析，无需账号和手写。">
 <title>Greenbook Atelier · 绿皮书练习室</title>
 <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css">
-<script src="app.js" defer></script>
+<script src="diagrams.js" defer></script><script src="app.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">跳至内容 / Skip to content</a>
 <header class="topbar">
 <a class="brand" href="#home"><span class="brandmark" aria-hidden="true">g<span>·</span></span><span>GREENBOOK <em>ATELIER</em><small>绿皮书练习室</small></span></a>
-<nav class="topnav" aria-label="Main"><a href="#home" data-nav="home">学习首页</a><a href="#library" data-nav="library">全部练习</a><a href="#reader=17" data-nav="reader">原书阅读</a></nav>
+<nav class="topnav" aria-label="Main"><a href="#home" data-nav="home">学习首页</a><a href="#practice" data-nav="practice">五题练习</a><a href="#library" data-nav="library">题库</a><a href="#map" data-nav="map">知识图解</a></nav>
 <div class="top-actions"><button id="language" class="language" aria-label="切换语言 / Change language">中 / EN</button><button id="mobile-nav" aria-expanded="false" aria-controls="sidebar" class="icon-button menu">☰</button></div>
 </header>
 <div class="shell">
 <aside id="sidebar"><div class="sidebar-heading" id="contents-label">学习目录 <span>CONTENTS</span></div><nav id="chapters" aria-label="章节 / Chapters"></nav>
-<div class="sidebar-bottom"><div class="progress-label"><span id="progress-label">学习进度</span><strong id="progress-text">0 / 158</strong></div><div class="progress-track"><div id="progress-bar"></div></div><p id="local-label">进度与笔记仅保存在当前浏览器。</p><button id="export" class="text-button">导出学习记录 ↗</button><button id="import" class="text-button">导入学习记录 ↙</button><input id="import-file" hidden type="file" accept="application/json,.json"></div>
+<div id="sidebar-bottom" class="sidebar-bottom"></div>
 </aside>
 <main id="main" tabindex="-1"><div class="loading">正在准备练习室… / Preparing your study room…</div></main>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
-<footer><span>GREENBOOK ATELIER</span><p>Xinfeng Zhou · A Practical Guide to Quantitative Finance Interviews · 2008<br><span id="footer-note">原书扫描页完整保留；双语学习题与讲解为学习版改写，可与原页逐项核对。</span></p><a href="https://x-lf.github.io/">x-lf.github.io ↗</a></footer>
+<footer><span>GREENBOOK ATELIER</span><p>Xinfeng Zhou · A Practical Guide to Quantitative Finance Interviews · 2008<br><span id="footer-note">按原书七章整理 · 中英文选择题与讲解 · 图示原生重绘 · 无账号、无持久记录</span></p><a href="https://x-lf.github.io/">x-lf.github.io ↗</a></footer>
 <noscript>请启用 JavaScript 以使用练习、笔记和原书阅读功能。Enable JavaScript to use the learning features.</noscript>
 </body></html>
