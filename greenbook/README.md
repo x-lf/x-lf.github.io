@@ -14,6 +14,12 @@ A buildless Chinese/English practice website based on the supplied, owner-author
 - 42 reasoning/comparison tables and six model-computed charts supplement the retained23 native diagrams. Axes, units and assumptions are labeled. Wide formulas and tables scroll inside their own regions.
 - No accounts, notes, saved history, analytics, third-party runtime scripts or backend. Videos remain deferred. Reduced motion is respected; no sound autoplays.
 
+## Reading and mathematical typography
+
+Question stems, answer choices and continuous explanations use document-style serif body text:20px on desktop and18px on small screens, with generous leading and darker English translations. Large expressions scroll within the option.
+
+Slashes are semantic:binary0/1, date lists, units and code remain literal. Arithmetic fractions use a reviewed allowlist; compound fractions, radicals, powers, factorials and Monte Carlo sums have explicit authored LaTeX rules in `typography-rules.cjs`. Source OCR is not passed through numeric-fraction guessing. Bilingual answer delimiters accept missing spaces after the slash without changing canonical text.
+
 ## Local editorial review
 
 Question and explanation reviews are private local artifacts and are not included in the published site. Review pages, links and downloadable audit JSON have been removed. The public question data carries only a release-approval boolean; no scores or previous low-quality drafts are shipped.

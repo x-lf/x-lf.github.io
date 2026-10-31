@@ -1,7 +1,7 @@
 'use strict';
 function dualText(text){const [zh,...en]=text.split(' / ');return t(zh,en.join(' / ')||zh);}
 function explanationProse(value){return `<div class="derivation-prose bilingual">${language!=='en'?value.zh.split('\n\n').map(p=>`<p class="zh" lang="zh-CN">${richString(p)}</p>`).join(''):''}${language!=='zh'?value.en.split('\n\n').map(p=>`<p class="en" lang="en">${richString(p)}</p>`).join(''):''}</div>`;}
-function explanationTable(table){if(!table)return'';return `<section class="worked-table"><h3>${esc(dualText(table.title))}</h3><div class="explanation-table-scroll" role="region" tabindex="0" aria-label="${esc(dualText(table.title))}"><table><thead><tr>${table.headers.map(h=>`<th scope="col">${esc(dualText(h))}</th>`).join('')}</tr></thead><tbody>${table.rows.map(row=>`<tr>${row.map(v=>`<td>${esc(dualText(v))}</td>`).join('')}</tr>`).join('')}</tbody></table></div></section>`;}
+function explanationTable(table){if(!table)return'';return `<section class="worked-table"><h3>${esc(dualText(table.title))}</h3><div class="explanation-table-scroll" role="region" tabindex="0" aria-label="${esc(dualText(table.title))}"><table><thead><tr>${table.headers.map(h=>`<th scope="col">${esc(dualText(h))}</th>`).join('')}</tr></thead><tbody>${table.rows.map(row=>`<tr>${row.map(v=>`<td>${richString(dualText(v))}</td>`).join('')}</tr>`).join('')}</tbody></table></div></section>`;}
 function explanationChart(plot){
  if(!plot)return'';
  const points=plot.series.flatMap(s=>s.points),xs=points.map(p=>p[0]),ys=points.map(p=>p[1]);

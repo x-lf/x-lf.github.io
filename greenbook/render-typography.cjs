@@ -5,7 +5,7 @@ const qs=JSON.parse(fs.readFileSync(path.join(__dirname,'data.json'),'utf8'));
 const out={},whole={},snippets=new Map();
 const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const math=tex=>katex.renderToString(tex,{output:'mathml',displayMode:false,throwOnError:true,strict:'error',trust:false});
-function O(i,...tex){if(tex.length!==4)throw Error(i);qs[i].quiz.options.forEach((s,j)=>{const parts=s.split(' / ');for(const p of [parts[0],parts.slice(1).join(' / ')||parts[0]])if(!tex[j].includes('\\text'))whole[p.trim()]=tex[j];});}
+function O(i,...tex){if(tex.length!==4)throw Error(i);qs[i].quiz.options.forEach((s,j)=>{const parts=s.split(/\s+\/\s*/);for(const p of [parts[0],parts.slice(1).join(' / ')||parts[0]])if(!tex[j].includes('\\text'))whole[p.trim()]=tex[j];});}
 function M(raw,tex){snippets.set(raw,tex);}
 O(10,'\\sqrt2','2','1','2^{1/4}');
 O(17,'\\frac{T-R}{8}','\\frac T8','\\frac{T-8R}{8}','\\frac{T-R}{7}');
@@ -103,22 +103,33 @@ M('dr=a(b−r)dt+σdW','dr=a(b-r)\\,dt+\\sigma\\,dW');M('dr=a(b−r)dt+σ√r dW
 M('T(n)=2T(n/2)+Θ(n)','T(n)=2T(n/2)+\\Theta(n)');M('u_t=κu_xx','u_t=\\kappa u_{xx}');
 M('p(x)=a₀+a₁x+…+a_nx^n','p(x)=a_0+a_1x+\\cdots+a_nx^n');
 
+require('./typography-rules.cjs')({M,O});
+
 const pattern=[...snippets.keys()].sort((a,b)=>b.length-a.length).map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
 const regex=new RegExp(pattern,'g');
+// Slashes carry meaning: only reviewed arithmetic fractions may become stacked fractions.
+// Binary alternatives, dates, units, code and source OCR never enter this numeric rule.
+const reviewedFractions=new Set('2/9 3/4 6/36 1/2 1/3 1/4 1/5 1/6 1/7 1/8 1/10 1/12 1/13 1/17 1/18 1/36 1/50 1/99 1/100 1/1000 2/3 2/5 2/7 3/5 3/6 3/51 3/100 4/7 4/9 4/52 5/6 5/9 5/54 6/7 6/13 7/8 7/12 7/13 8/17 8/3 9/2 10/30 10/40 10/60 11/30 11/144 12/29 13/49 13/52 14/3 16/3 16/17 16/625 17/4 20/30 20/60 20/216 23/144 26/50 30/40 30/60 39/51 44/120 48/5 52/5 53/5 99/100 100/2 100/5 100/25 104/2 499/500 500/501 609/625 609/2500 999/1000 999/1024 1024/2023 0.0099/0.0594 3/0.2'.split(' '));
 let mathSpans=0;
 function inline(text,allowFractions=true){
  if(Object.hasOwn(whole,text)){mathSpans++;return math(whole[text]);}
- const simple=chunk=>{if(!allowFractions)return esc(chunk);let pos=0,html='';for(const m of chunk.matchAll(/(?<![\w/.])(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)(?![\w/.])/g)){html+=esc(chunk.slice(pos,m.index))+math(`\\frac{${m[1]}}{${m[2]}}`);mathSpans++;pos=m.index+m[0].length;}return html+esc(chunk.slice(pos));};
- let pos=0,html='';regex.lastIndex=0;for(const m of text.matchAll(regex)){html+=simple(text.slice(pos,m.index))+math(snippets.get(m[0]));mathSpans++;pos=m.index+m[0].length;}return html+simple(text.slice(pos));
+ const simple=chunk=>{if(!allowFractions)return esc(chunk);let pos=0,html='';for(const m of chunk.matchAll(/(?<![\w/.√])([0-9]+(?:\.[0-9]+)?)\/([0-9]+(?:\.[0-9]+)?)(?![\w/^!²³⁴⁵⁶⁷⁸⁹₀₁₂₃₄₅₆₇₈₉]|\.\d)/g)){
+  if(!reviewedFractions.has(m[0]))continue;
+  html+=esc(chunk.slice(pos,m.index))+math(`\\frac{${m[1]}}{${m[2]}}`);mathSpans++;pos=m.index+m[0].length;
+ }return html+esc(chunk.slice(pos));};
+ let pos=0,html='';regex.lastIndex=0;for(const m of text.matchAll(regex)){if(m[0].includes('/')&&/[A-Za-z0-9]$/.test(m[0])&&/^[A-Za-z0-9_^!²³⁴⁵⁶⁷⁸⁹]/.test(text.slice(m.index+m[0].length)))continue;html+=simple(text.slice(pos,m.index))+math(snippets.get(m[0]));mathSpans++;pos=m.index+m[0].length;}return html+simple(text.slice(pos));
 }
 for(let i=0;i<qs.length;i++){
  const q=qs[i],texts=[];
  for(const value of [q.prompt,q.quiz.prompt,q.hint,q.solution])for(const lang of ['zh','en'])texts.push(value[lang],...value[lang].split('\n\n'));
- for(const part of q.originalQuestion?.parts||[])texts.push(...part.text.split('\n\n'));
- for(const s of q.quiz.options){const parts=s.split(' / ');for(const value of [parts[0].trim(),(parts.slice(1).join(' / ')||parts[0]).trim()]){
+ if(q.explanation.table)for(const item of [q.explanation.table.title,...q.explanation.table.headers,...q.explanation.table.rows.flat()])texts.push(...item.split(/\s+\/\s*/));
+ const sourceTexts=(q.originalQuestion?.parts||[]).flatMap(part=>part.text.split('\n\n'));
+ for(const s of q.quiz.options){const parts=s.split(/\s+\/\s*/);for(const value of [parts[0].trim(),(parts.slice(1).join(' / ')||parts[0]).trim()]){
   if([142,143,151,152].includes(i)){out[value]=`<code class="choice-code">${esc(value)}</code>`;}else texts.push(value);
  }}
- for(const text of texts){if(Object.hasOwn(out,text))continue;const html=inline(text,i!==4);if(html!==esc(text))out[text]=html;}
+ for(const text of texts){if(Object.hasOwn(out,text))continue;const html=inline(text,q.id!=='c2-birthday-problem');if(html!==esc(text))out[text]=html;}
+ // Preserve source transcription: do not guess which OCR slashes are division.
+ for(const text of sourceTexts){if(Object.hasOwn(out,text))continue;const html=inline(text,false);if(html!==esc(text))out[text]=html;}
 }
 // Raw prose snippets are escaped; the only injected markup comes from the strict trusted renderer or code wrappers.
 fs.writeFileSync(path.join(__dirname,'typography.json'),JSON.stringify(out,null,2)+'\n');
