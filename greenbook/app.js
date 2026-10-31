@@ -99,7 +99,7 @@ $('#language').onclick=()=>{const order=['both','zh','en'];language=order[(order
 $('#mobile-nav').onclick=()=>{const open=$('#sidebar').classList.toggle('open');$('#mobile-nav').setAttribute('aria-expanded',open);};
 window.addEventListener('hashchange',()=>{searchQuery='';if(route().kind!=='practice'){run=null;transitioning=false;}if(lessons.length)render();});
 document.addEventListener('keydown',e=>{if(!run||run.finished||route().kind!=='practice'||transitioning||e.ctrlKey||e.metaKey||e.altKey)return;if(e.target.matches('input,select,textarea'))return;if(/^[1-4]$/.test(e.key)&&!run.submitted){e.preventDefault();chooseRun(Number(e.key)-1);}else if(e.key==='Enter'&&(e.target.matches('body,main,#run-action,.answer-option,.run-question-title')||e.target.closest('.option-copy,.option-letter'))){e.preventDefault();if(run.submitted)nextQuestion();else submitRun();}});
-async function init(){try{const response=await fetch('data.json?v=greenbook-v4');if(!response.ok)throw Error(response.status);lessons=await response.json();render();}catch(e){$('#main').innerHTML=`<div class="empty">${esc(t('内容加载失败，请刷新页面。','Content could not load. Please refresh.'))}</div>`;}}
+async function init(){try{const response=await fetch('data.json?v=greenbook-v4.1');if(!response.ok)throw Error(response.status);lessons=await response.json();render();}catch(e){$('#main').innerHTML=`<div class="empty">${esc(t('内容加载失败，请刷新页面。','Content could not load. Please refresh.'))}</div>`;}}
 // Remove only the obsolete first-edition record namespace; this edition never stores study activity.
 try{localStorage.removeItem('greenbook-atelier-v1');}catch(e){}
 init();

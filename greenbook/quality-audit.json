@@ -1,5 +1,5 @@
 {
-  "version": "greenbook-v4",
+  "version": "greenbook-v4.1",
   "reviewDate": "2026-10-31",
   "threshold": 80,
   "method": "逐题编辑审查；从100分按公开问题项扣分。分数是编辑判断，不是多人盲评或真实作答数据校准。低于80分必须整改；不等于已完整覆盖每道原书的小问。新增题单独标记，无虚构的旧版分数。",
@@ -1837,8 +1837,8 @@
       },
       "current": {
         "prompt": {
-          "zh": "两枚相同玻璃球在100层楼测试。存在X∈{1,…,100}：低于X不碎，从X及以上扔下必碎；未碎球可重复用，碎球不能再用。要确定X，最坏情况下最少扔几次？",
-          "en": "Two identical glass balls test a 100-floor building. An unknown X in {1,…,100} is the first breaking floor: below X the ball survives, at or above X it breaks. Intact balls are reusable. What is the minimum worst-case number of drops to determine X?"
+          "zh": "两枚相同玻璃球在100层楼测试。存在X∈{1,…,101}：低于X不碎，从X及以上扔下必碎；X=101表示100层内都不碎。未碎球可重复用，碎球不能再用。要确定X，最坏情况下最少扔几次？",
+          "en": "Two identical glass balls test a 100-floor building. An unknown X in {1,…,101} is the first breaking floor: below X the ball survives, at or above X it breaks. X=101 means all 100 building floors are safe. Intact balls are reusable. What is the minimum worst-case number of drops to determine X?"
         },
         "quiz": {
           "prompt": {
